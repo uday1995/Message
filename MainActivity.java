@@ -1,37 +1,49 @@
-package com.example.uday.abbrivate;
+package com.example.uday.message;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
+    Button sendSMSBtn;
+    EditText toPhoneNumberET;
+    EditText smsMessageET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button btn1= (Button) findViewById(R.id.continu);
-        btn1.setOnClickListener(new View.OnClickListener() {
+        sendSMSBtn = (Button) findViewById(R.id.button);
+        toPhoneNumberET = (EditText) findViewById(R.id.e1);
+        smsMessageET = (EditText) findViewById(R.id.e2);
+        sendSMSBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText name = (EditText) findViewById(R.id.name);
-                String cname = name.getText().toString();
-                Bundle bundle = new Bundle();
-                bundle.putString("names", cname);
-                Intent next = new Intent(getApplicationContext(), MainActivity2Activity.class);
-                next.putExtras(bundle);
-                startActivity(next);
+                sendSMS();
             }
         });
     }
+    protected void sendSMS(){
+        String forprint=toPhoneNumberET.getText().toString();
+        String forprint2=smsMessageET.getText().toString();
+        try {
+            SmsManager a=SmsManager.getDefault().getDefault();
+            a.sendTextMessage(forprint,null,forprint2,null,null);
+            Toast.makeText(getApplicationContext(), "sms sent", Toast.LENGTH_LONG).show();
 
+
+        } catch (Exception e){
+            Toast.makeText(getApplicationContext(),"sms sent failed",Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
